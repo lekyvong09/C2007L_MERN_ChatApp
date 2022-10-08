@@ -1,9 +1,10 @@
+import AuthBox from "../../app/layout/AuthBox";
 
 
 export default function RegisterPage() {
     return (
-        <div>
+        <AuthBox>
             Register Page
-        </div>
+        </AuthBox>
     );
 }
