@@ -6,9 +6,12 @@ import InputWithLabel from "../../app/layout/InputWithLabels";
 import PrimaryButton from "../../app/layout/PrimaryButton";
 import RedirectInfo from "../../app/layout/RedirectInfo";
 import { validateEmail, validatePassword } from "../../app/validators/validator";
+import { useDispatch } from "react-redux";
+import { loginThunk } from "../../app/reducers/authSlice";
 
 
 export default function LoginPage() {
+    const dispatch = useDispatch();
     const navigate = useNavigate();
 
     const [mail, setMail] = useState('');
@@ -20,7 +23,8 @@ export default function LoginPage() {
     }, [mail, password]);
 
     const handleLogin = () => {
-        console.log(`login with email ${mail} and ${password}`);
+        dispatch(loginThunk({email: mail, password: password}));
+        // navigate('/dashboard');
     }
 
     const handlePushToRegisterPage = () => {
