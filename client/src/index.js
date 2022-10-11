@@ -6,6 +6,9 @@ import './index.css';
 import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { store } from './app/store/store';
+import axios from 'axios';
+
+axios.defaults.baseURL = 'http://localhost:8080/api/';
 
 const container = document.getElementById('root');
 const root = createRoot(container);

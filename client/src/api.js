@@ -3,7 +3,7 @@ import axios from 'axios';
 
 export const login = async (data) => {
     try {
-        return await axios.post('http://localhost:8080/api/auth/login', data);
+        return await axios.post('auth/login', data);
     } catch (exception) {
         return {
             error: true,
@@ -14,7 +14,7 @@ export const login = async (data) => {
 
 export const register = async (data) => {
     try {
-        return await axios.post('http://localhost:8080/api/auth/register', data);
+        return await axios.post('auth/register', data);
     } catch (exception) {
         return {
             error: true,

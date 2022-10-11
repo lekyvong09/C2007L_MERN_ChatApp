@@ -8,6 +8,7 @@ import RedirectInfo from "../../app/layout/RedirectInfo";
 import { validateEmail, validatePassword } from "../../app/validators/validator";
 import { useDispatch } from "react-redux";
 import { loginThunk } from "../../app/reducers/authSlice";
+import { unwrapResult } from "@reduxjs/toolkit";
 
 
 export default function LoginPage() {
@@ -22,9 +23,19 @@ export default function LoginPage() {
         setIsFormValid(validateEmail(mail) && validatePassword(password));
     }, [mail, password]);
 
-    const handleLogin = () => {
-        dispatch(loginThunk({email: mail, password: password}));
-        // navigate('/dashboard');
+    const handleLogin = async () => {
+        try {
+            const resultAction = await dispatch(loginThunk({email: mail, password: password}));
+
+            const originalPromiseResult = unwrapResult(resultAction);
+            console.log(originalPromiseResult);
+            if (originalPromiseResult?.token) {
+                navigate('/dashboard');
+            }
+        } catch (rejectedValueOrSerializedError) {
+            console.log(rejectedValueOrSerializedError);
+        }
+        
     }
 
     const handlePushToRegisterPage = () => {
