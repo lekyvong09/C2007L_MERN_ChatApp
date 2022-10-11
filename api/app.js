@@ -16,6 +16,13 @@ console.log('Starting API server');
  */
 app.use(bodyParser.json());
 
+app.use((req, res, next) => {
+    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+    next();
+});
+
 app.use('/api/auth', authRoutes)
 
 app.use('/api/test-auth-middleware', authMiddleware, (req, res, next) => {
