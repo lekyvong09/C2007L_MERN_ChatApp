@@ -1,10 +1,11 @@
-import { Typography } from "@mui/material";
-import { useState } from "react";
+import { Tooltip, Typography } from "@mui/material";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import AuthBox from "../../app/layout/AuthBox";
 import InputWithLabel from "../../app/layout/InputWithLabels";
 import PrimaryButton from "../../app/layout/PrimaryButton";
 import RedirectInfo from "../../app/layout/RedirectInfo";
+import { validateEmail, validatePassword } from "../../app/validators/validator";
 
 
 export default function LoginPage() {
@@ -13,6 +14,10 @@ export default function LoginPage() {
     const [mail, setMail] = useState('');
     const [password, setPassword] = useState('');
     const [isFormValid, setIsFormValid] = useState(false);
+
+    useEffect(() => {
+        setIsFormValid(validateEmail(mail) && validatePassword(password));
+    }, [mail, password]);
 
     const handleLogin = () => {
         console.log(`login with email ${mail} and ${password}`);
@@ -39,13 +44,20 @@ export default function LoginPage() {
                 type='password'
                 placeholder='Enter password'
             />
-
-            <PrimaryButton
-                label="Login"
-                disabled={!isFormValid}
-                onClick={handleLogin}
-                additionalStyle={{marginTop: '30px'}}
-            />
+            <Tooltip title={!isFormValid 
+                                ? 'Enter correct email and password. Password should be between 6 and characters'
+                                : 'Press to login'}
+            >
+                <div>
+                    <PrimaryButton
+                        label="Login"
+                        disabled={!isFormValid}
+                        onClick={handleLogin}
+                        additionalStyle={{marginTop: '30px'}}
+                    />
+                </div>
+            </Tooltip>
+            
             <RedirectInfo 
                 text='Need an account?'
                 redirectText=' Create an account'
