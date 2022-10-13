@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import * as api from '../../api';
+import {toast} from 'react-toastify';
 
 export const loginThunk = createAsyncThunk(
     'auth/login',
@@ -9,8 +10,10 @@ export const loginThunk = createAsyncThunk(
 
             if (response.error && response.exception.response.data) {
                 console.log(response.exception.response.data.message);
+                toast.error(response.exception.response.data.message, {theme: 'colored'});
             } else if (response.error && response.exception) {
                 console.log(response.exception.message);
+                toast.error(response.exception.message, {theme: 'colored'});
             } else if (response.error) {
                 console.log(response);
             }
@@ -35,8 +38,10 @@ export const registerThunk = createAsyncThunk(
 
             if (response.error && response.exception.response.data) {
                 console.log(response.exception.response.data.message);
+                toast.error(response.exception.response.data.message, {theme: 'colored'});
             } else if (response.error && response.exception) {
                 console.log(response.exception.message);
+                toast.error(response.exception.message, {theme: 'colored'});
             } else if (response.error) {
                 console.log(response);
             }
