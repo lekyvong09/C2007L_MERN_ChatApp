@@ -1,14 +1,18 @@
 import { Tooltip, Typography } from "@mui/material";
+import { unwrapResult } from "@reduxjs/toolkit";
 import { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import AuthBox from "../../app/layout/AuthBox";
 import InputWithLabel from "../../app/layout/InputWithLabels";
 import PrimaryButton from "../../app/layout/PrimaryButton";
 import RedirectInfo from "../../app/layout/RedirectInfo";
+import { registerThunk } from "../../app/reducers/authSlice";
 import { validateEmail, validatePassword, validateUsername } from "../../app/validators/validator";
 
 
 export default function RegisterPage() {
+    const dispatch = useDispatch();
     const navigate = useNavigate();
 
     const [mail, setMail] = useState('');
@@ -20,8 +24,19 @@ export default function RegisterPage() {
         setIsFormValid(validateEmail(mail) && validatePassword(password) && validateUsername(username));
     }, [mail, password, username]);
 
-    const handleRegister = () => {
-        console.log(`register with email ${mail} and ${password}`);
+    const handleRegister = async () => {
+        try {
+            const resultAction = await dispatch(registerThunk({email: mail, password: password, username: username}));
+
+            const originalPromiseResult = unwrapResult(resultAction);
+            if (originalPromiseResult?.token) {
+                navigate('/dashboard');
+            }
+
+        } catch (rejectedValueOrSerializedError) {
+            console.log(rejectedValueOrSerializedError);
+        }
+        
     }
 
     const handlePushToLoginPage = () => {
