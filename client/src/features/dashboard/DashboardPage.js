@@ -11,6 +11,7 @@ import ClearIcon from '@mui/icons-material/Clear';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { useDispatch } from 'react-redux';
 import { logoutReducer, setUserDetailsReducer } from '../../app/reducers/authSlice';
+import { connectWithSocketServer } from '../realtimeCommunication/socketConnection';
 
 
 const Wrapper = styled('div')({
@@ -116,6 +117,7 @@ export default function DashboardPage() {
             handleLogout();
         } else {
             dispatch(setUserDetailsReducer(JSON.parse(userDetails)));
+            connectWithSocketServer(userDetails);
         }
     }, [dispatch, handleLogout]);
 

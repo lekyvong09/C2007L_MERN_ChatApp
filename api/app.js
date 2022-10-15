@@ -47,9 +47,10 @@ app.use((err, req, res, next) => {
 
 mongoose.connect(process.env.MONGO_URI)
     .then(result => {
-        app.listen(PORT, () => {
+        const httpServer = app.listen(PORT, () => {
             console.log(`API is listening on port ${PORT}`);
         });
+        require('./socket').registerSocketServer(httpServer);
     })
     .catch(err => {
         console.log('API fail to start');
