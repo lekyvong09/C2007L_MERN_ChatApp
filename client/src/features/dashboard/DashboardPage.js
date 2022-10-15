@@ -117,7 +117,7 @@ export default function DashboardPage() {
             handleLogout();
         } else {
             dispatch(setUserDetailsReducer(JSON.parse(userDetails)));
-            connectWithSocketServer(userDetails);
+            connectWithSocketServer(JSON.parse(userDetails));
         }
     }, [dispatch, handleLogout]);
 
