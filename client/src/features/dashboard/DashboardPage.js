@@ -1,13 +1,17 @@
 import { styled } from '@mui/system';
 import Button from '@mui/material/Button';
 import GroupsIcon from '@mui/icons-material/Groups';
-import { Box, IconButton, Typography } from '@mui/material';
+import { Box, IconButton, Menu, MenuItem, Typography } from '@mui/material';
 import { useState } from 'react';
 import AddFriendDialog from './AddFriendDialog';
 import CustomAvatar from '../../app/layout/CustomAvatar';
 import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
 import CheckIcon from '@mui/icons-material/Check';
 import ClearIcon from '@mui/icons-material/Clear';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
+import { useDispatch } from 'react-redux';
+import { logoutReducer } from '../../app/reducers/authSlice';
+
 
 const Wrapper = styled('div')({
     width: '100%',
@@ -41,7 +45,10 @@ const AppBar = styled('div')({
     top: '0',
     position: 'absolute',
     padding: '0 15px',
-    borderBottom: '1px solid black'
+    borderBottom: '1px solid black',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-between',
 });
 
 const Messenger = styled('div')({
@@ -80,8 +87,16 @@ const invitations = [
 ];
 
 export default function DashboardPage() {
-
+    const dispatch = useDispatch();
     const [isDialogOpen, setIsDialogOpen] = useState(false);
+    const [anchorEl, setAnchorEl] = useState(null);
+    const open = Boolean(anchorEl);
+    const handleClick = (event) => {
+        setAnchorEl(event.currentTarget);
+    };
+    const handleClose = () => {
+        setAnchorEl(null);
+    };
 
     const handleCloseAddFriendDialog = () => {
         setIsDialogOpen(false);
@@ -89,6 +104,10 @@ export default function DashboardPage() {
 
     const handleOpenAddFriendDialog = () => {
         setIsDialogOpen(true);
+    }
+
+    const handleLogout = () => {
+        dispatch(logoutReducer());
     }
 
     return (
@@ -148,6 +167,7 @@ export default function DashboardPage() {
                                     textTransform: 'none',
                                     position: 'relative',
                                 }}
+                                key={f.id}
                             >
                                 <CustomAvatar username={f.username} />
                                 <Typography
@@ -199,6 +219,7 @@ export default function DashboardPage() {
                                     display: 'flex',
                                     alignItems: 'center'
                                 }}
+                                key={i._id}
                             >
                                 <CustomAvatar username={i.senderId.username} />
                                 <Typography
@@ -226,7 +247,30 @@ export default function DashboardPage() {
                 </PendingInvitationList>
 
             </FriendsSideBar>
-            <AppBar></AppBar>
+            <AppBar>
+                <IconButton 
+                    style={{color: 'white'}}
+                    id="basic-button"
+                    aria-controls={open ? 'basic-menu' : undefined}
+                    aria-haspopup="true"
+                    aria-expanded={open ? 'true' : undefined}
+                    onClick={handleClick}
+                >
+                    <MoreVertIcon />
+                </IconButton>
+                <Menu
+                    id="basic-menu"
+                    anchorEl={anchorEl}
+                    open={open}
+                    onClose={handleClose}
+                    MenuListProps={{
+                    'aria-labelledby': 'basic-button',
+                    }}
+                >
+                    <MenuItem onClick={handleLogout}>Logout</MenuItem>
+                </Menu>
+            </AppBar>
+
             <Messenger></Messenger>
         </Wrapper>
     );
