@@ -2,7 +2,7 @@ import { styled } from '@mui/system';
 import Button from '@mui/material/Button';
 import GroupsIcon from '@mui/icons-material/Groups';
 import { Box, IconButton, Menu, MenuItem, Typography } from '@mui/material';
-import { useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import AddFriendDialog from './AddFriendDialog';
 import CustomAvatar from '../../app/layout/CustomAvatar';
 import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
@@ -10,7 +10,7 @@ import CheckIcon from '@mui/icons-material/Check';
 import ClearIcon from '@mui/icons-material/Clear';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { useDispatch } from 'react-redux';
-import { logoutReducer } from '../../app/reducers/authSlice';
+import { logoutReducer, setUserDetailsReducer } from '../../app/reducers/authSlice';
 
 
 const Wrapper = styled('div')({
@@ -106,9 +106,18 @@ export default function DashboardPage() {
         setIsDialogOpen(true);
     }
 
-    const handleLogout = () => {
+    const handleLogout = useCallback (() => {
         dispatch(logoutReducer());
-    }
+    }, [dispatch]);
+
+    useEffect(() => {
+        const userDetails = localStorage.getItem('user');
+        if (!userDetails || userDetails === 'undefined') {
+            handleLogout();
+        } else {
+            dispatch(setUserDetailsReducer(JSON.parse(userDetails)));
+        }
+    }, [dispatch, handleLogout]);
 
     return (
         <Wrapper>

@@ -71,7 +71,10 @@ export const authSlice = createSlice({
             state.userDetails = null;
             localStorage.clear();
             window.location.pathname = '/login';
-        }
+        },
+        setUserDetailsReducer: (state, action) => {
+            state.userDetails = action.payload;
+        },
     },
     extraReducers: (builder) => {
         builder.addCase(loginThunk.fulfilled, (state, action) => {
@@ -101,6 +104,6 @@ export const authSlice = createSlice({
     },
 });
 
-export const { logoutReducer } = authSlice.actions;
+export const { logoutReducer, setUserDetailsReducer } = authSlice.actions;
 
 export default authSlice.reducer;
