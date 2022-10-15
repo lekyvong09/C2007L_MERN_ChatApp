@@ -1,9 +1,13 @@
 import { styled } from '@mui/system';
 import Button from '@mui/material/Button';
 import GroupsIcon from '@mui/icons-material/Groups';
-import { Typography } from '@mui/material';
+import { Box, IconButton, Typography } from '@mui/material';
 import { useState } from 'react';
 import AddFriendDialog from './AddFriendDialog';
+import CustomAvatar from '../../app/layout/CustomAvatar';
+import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
+import CheckIcon from '@mui/icons-material/Check';
+import ClearIcon from '@mui/icons-material/Clear';
 
 const Wrapper = styled('div')({
     width: '100%',
@@ -55,6 +59,25 @@ const FriendsList = styled('div')({
     width: '100%',
     flexGrow: 1
 });
+
+const handleAcceptInvitation = () => {
+
+}
+
+const handleRejectInvitation = () => {
+    
+}
+
+const friends = [
+    {id: '1', username: 'Ray', isOnline: true},
+    {id: '2', username: 'Tommy', isOnline: false},
+    {id: '3', username: 'Bob', isOnline: true},
+];
+
+const invitations = [
+    {_id: '1', senderId: {username: 'Bob', mail: 'bob@email.com'}},
+    {_id: '2', senderId: {username: 'Tommy', mail: 'tommy@email.com'}},
+];
 
 export default function DashboardPage() {
 
@@ -111,7 +134,48 @@ export default function DashboardPage() {
                     Private Message
                 </Typography>
 
-                <FriendsList />
+                <FriendsList>
+                    {
+                        friends.map(f => (
+                            <Button
+                                style={{
+                                    width: '100%',
+                                    height: '42px',
+                                    display: 'flex',
+                                    justifyContent: 'flex-start',
+                                    color: 'black',
+                                    marginTop: '10px',
+                                    textTransform: 'none',
+                                    position: 'relative',
+                                }}
+                            >
+                                <CustomAvatar username={f.username} />
+                                <Typography
+                                    style={{
+                                        marginLeft: '7px',
+                                        fontWeight: 700,
+                                        color: '#8e9297'
+                                    }}
+                                    variant='subtitle1'
+                                    align='left'
+                                >
+                                    {f.username}
+                                </Typography>
+                                { f.isOnline && 
+                                    (<Box sx={{
+                                        display: 'flex',
+                                        position: 'absolute',
+                                        right: '5px',
+                                        color: '#3ba55d',
+                                        alignItems: 'center'
+                                    }}>
+                                        <FiberManualRecordIcon />
+                                    </Box>)
+                                }
+                            </Button>
+                        ))
+                    }
+                </FriendsList>
 
                 <Typography
                     sx={{
@@ -124,7 +188,42 @@ export default function DashboardPage() {
                     Invitation
                 </Typography>
 
-                <PendingInvitationList />
+                <PendingInvitationList>
+                    {
+                        invitations.map(i => (
+                            <Box
+                                sx={{
+                                    width: '100%',
+                                    height: '42px',
+                                    marginTop: '10px',
+                                    display: 'flex',
+                                    alignItems: 'center'
+                                }}
+                            >
+                                <CustomAvatar username={i.senderId.username} />
+                                <Typography
+                                    sx={{
+                                        marginLeft: '7px',
+                                        fontWeight: 700,
+                                        color: '#8e9297',
+                                        flexGrow: 1
+                                    }}
+                                    variant='subtitle1'
+                                >
+                                    {i.senderId.username}
+                                </Typography>
+                                <Box sx={{display: 'flex'}}>
+                                    <IconButton style={{color: 'white'}} onClick={handleAcceptInvitation}>
+                                        <CheckIcon />
+                                    </IconButton>
+                                    <IconButton style={{color: 'white'}} onClick={handleRejectInvitation}>
+                                        <ClearIcon />
+                                    </IconButton>
+                                </Box>
+                            </Box>
+                        ))
+                    }
+                </PendingInvitationList>
 
             </FriendsSideBar>
             <AppBar></AppBar>
